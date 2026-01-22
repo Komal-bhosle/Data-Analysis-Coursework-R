@@ -1,0 +1,332 @@
+---
+format: html
+title: "Exercise 1"
+subtitle: "Import and Export"
+author: "Komal Bhosle"
+abstract-title: "RStudio Link"
+abstract: <https://posit.cloud/spaces/603138/content/9778036>
+toc: true
+---
+
+```{r}
+
+library(tidyverse)      # loads 9 core tidyverse packages
+library(readxl)         # readxl is not a core tidyverse package
+library(writexl)        # writexl is not a tidyverse package
+library(openintro)      # for datasets
+
+```
+
+
+## 1.1 – Exporting Dataframe to CSV
+
+```{r}
+
+write_csv(
+  x    = malaria,
+  file = "malara.csv"
+)
+
+```
+
+
+## 1.2 – Exporting Dataframe to Excel
+
+```{r}
+
+write_xlsx(
+  x    = list(
+    antibiotics  = antibiotics,
+    babies_crawl = babies_crawl,
+    cpr          = cpr
+  ),
+  path = "openintro_datasets.xlsx" 
+)
+
+```
+
+
+## 1.3 – Importing CSV as Dataframe
+
+```{r}
+
+malaria_csv_import <- 
+  read_csv(
+    file = "malara.csv"
+  )
+
+```
+
+
+## 1.4 – Importing Excel as Dataframe
+
+```{r}
+
+# use excel_sheets() first in Console
+
+antibiotics_excel_import <- 
+  read_excel(
+    path  = "openintro_datasets.xlsx",
+    sheet = "antibiotics"
+  )
+
+babies_crawl_excel_import <- 
+  read_excel(
+    path  = "openintro_datasets.xlsx",
+    sheet = "babies_crawl"
+  )
+
+cpr_excel_import <- 
+  read_excel(
+    path  = "openintro_datasets.xlsx",
+    sheet = "cpr"
+  )
+
+```
+
+---
+title: "Exercise 2"
+subtitle: "Data Tidying"
+toc: true
+---
+
+```{r}
+
+library(tidyverse)
+
+```
+
+## 2.1 -- Pivoting
+
+```{r}
+
+# =================================================================
+# MELTING VARIABLES
+# =================================================================
+
+table1_melt <-
+  pivot_longer(
+    data     = table1,
+    cols     = "cases":"population",
+    names_to = "type"
+  )
+
+View(table1)
+
+View(table1_melt)
+```
+
+```{r}
+
+# =================================================================
+# CASTING VARIABLES
+# =================================================================
+
+table2_cast <-
+  pivot_wider(
+    data        = table2,
+    names_from  = "type",
+    values_from = "count"
+  )
+
+View(table2)
+
+View(table2_cast)
+```
+
+## 2.2 -- Separating
+
+```{r}
+table3_sep_wide_delim <-
+  separate_wider_delim(
+    data = table3,
+    cols = "rate",
+    delim = "/",
+    names = c(
+      "cases",
+      "population"
+    )
+  )
+
+View(table3)
+
+View(table3_sep_wide_delim)
+
+```
+
+```{r}
+
+patient_meds <- tribble(
+    ~name, ~meds,
+    "John", "Aspirin, Metformin",
+    "Jane", "Ibuprofen, Lisinopril",
+    "Amir", "Atorvastatin",
+    "Mary", "Warfarin, Levothyroxine, Losartan",
+    "Shiva", "Metoprolol, Amlodipine"
+)
+
+patient_meds
+
+```
+
+```{r}
+
+patient_meds_sep_long_delim <-
+  separate_longer_delim(
+    data  = patient_meds,
+    cols  = "meds",
+    delim = ","
+  )
+
+View(patient_meds)
+
+View(patient_meds_sep_long_delim)
+
+```
+
+
+## 2.3 -- Uniting
+
+```{r}
+
+table5_unite <-
+  unite(
+    data = table5,
+    col  = "year",
+    century,
+    year,
+    sep  = ""
+  )
+
+View(table5)
+
+View(table5_unite)
+
+```
+
+
+## 2.4 -- Splitting
+
+```{r}
+
+table1_cases <- 
+  table1 |>
+  select(
+    country,
+    year,
+    cases
+  )
+
+table1_population <-
+  table1 |>
+  select(
+    country,
+    year,
+    population
+  )
+
+View(table1_cases)
+
+View(table1_population)
+
+```
+
+## 2.5 -- Joining
+
+```{r}
+vax_centers <- tribble(
+  ~center,               ~city,         ~median_daily_appts,
+  "Broadway Health",     "New York",    200L,
+  "Lakeside Clinic",     "Chicago",     150L,
+  "Sunset Medical",      "Los Angeles", 180L,
+  "Riverfront Hospital", "Miami",       100L 
+)
+
+vax_centers
+
+```
+
+```{r}
+
+vax_types <- tribble(
+  ~center,           ~vaccine,            ~weekly_vax_total,
+  "Broadway Health", "Pfizer",            500L,
+  "Lakeside Clinic", "Moderna",           400L,
+  "Sunset Medical",  "Johnson & Johnson", 300L,
+  "Hilltop Health",  "AstraZeneca",       250L
+)
+
+vax_types
+
+```
+
+
+
+```{r}
+
+# =================================================================
+# FULL JOIN
+# =================================================================
+
+vax_full_join <-
+  full_join(
+    x  = vax_centers,
+    y  = vax_types,
+    by = "center"
+  )
+
+vax_full_join
+
+```
+
+```{r}
+
+# =================================================================
+# INNER JOIN
+# =================================================================
+
+vax_inner_join <-
+  inner_join(
+    x  = vax_centers,
+    y  = vax_types,
+    by = "center"
+  )
+
+vax_inner_join
+
+```
+
+```{r}
+
+# =================================================================
+# LEFT JOIN
+# =================================================================
+
+vax_left_join <-
+  left_join(
+    x = vax_centers,
+    y = vax_types,
+    by = "center"
+  )
+
+vax_left_join
+
+```
+
+```{r}
+
+# =================================================================
+# RIGHT JOIN
+# =================================================================
+
+vax_right_join <-
+  right_join(
+    x = vax_centers,
+    y = vax_types,
+    by = "center"
+  )
+
+vax_right_join
+
+```
+

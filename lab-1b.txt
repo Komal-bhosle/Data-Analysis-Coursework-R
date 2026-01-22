@@ -1,0 +1,193 @@
+# RStudio Link: 
+https://posit.cloud/spaces/603138/content/9677462
+
+# ===========================================
+# 1.1 - Packages Tab
+# ===========================================
+
+# No activities to document.
+
+# ===========================================
+# 1.2 - Viewing Installed Packages
+# ===========================================
+
+# No activities to document.
+
+# ===========================================
+# 1.3 - Loading and Unloading Packages
+# ===========================================
+
+# No activities to document.
+
+# ===========================================
+# 1.4 - Loaded Packages
+# ===========================================
+
+loaded_pkgs <- .packages(all.available = TRUE)
+
+# ===========================================
+# 2.1 - Installing the tidyverse
+# ===========================================
+
+# No activities to document.
+
+# ===========================================
+# 2.2 - Loading core tidyverse packages
+# ===========================================
+
+library(tidyverse)
+
+# ===========================================
+# 2.3 - Packages in the tidyverse
+# ===========================================
+
+all_tidyverse_pkgs <- tidyverse_packages()
+
+core_tidyverse_pkgs <- c(
+  "dplyr",
+  "forcats",
+  "ggplot2",
+  "lubridate",
+  "purrr",
+  "readr",
+  "stringr",
+  "tibble",
+  "tidyr"
+)
+
+non_core_tidyverse_pkgs <- c(
+  "broom",
+  "conflicted",
+  "dbplyr",
+  "dtplyr",
+  "googledrive",
+  "googlesheets4",
+  "haven",
+  "hms",
+  "httr",
+  "jsonlite",
+  "magrittr",
+  "modelr",
+  "pillar",
+  "ragg",
+  "readxl",
+  "reprex",
+  "rlang",
+  "rvest",
+  "xml2"
+)
+
+
+# ===========================================
+# 2.4 - data.frame versus tibble
+# ===========================================
+
+blood_donors_df <- data.frame(
+  name = c("Jane", "Dave", "Scott" ),
+  age  = c(35L, 51L, 18L),
+  type = c("AB", "O", "B")
+)
+
+blood_donors_as_tibble <- as_tibble(blood_donors_df)
+
+blood_donors_tibble <- tibble(
+  name = c("Jane", "Dave", "Scott"),
+  age  = c(35L, 51L, 18L),
+  type = c("AB", "O", "B")
+)
+
+blood_donors_tribble <- tribble(
+  ~name, ~age, ~type,
+  "Jane", 35L, "AB",
+  "Dave", 51L, "O",
+  "Scott", 18L, "B"
+)
+
+
+# ===========================================
+# 3.1 - Subsetting Vectors
+# ===========================================
+
+core_tidyverse_pkgs[4]
+
+core_tidyverse_pkgs[c(1, 3, 5)]
+
+core_tidyverse_pkgs[2 : 6]
+
+
+all_tidyverse_pkgs[15]
+
+all_tidyverse_pkgs[c(5, 8, 19)]
+
+all_tidyverse_pkgs[7 : 21]
+
+
+# ===========================================
+# 3.2 - Subsetting Dataframes via Operators
+# ===========================================
+
+airquality_tibble <- as_tibble(airquality)
+
+
+# Subsetting by [ ]
+
+airquality[1:5, 3]
+
+airquality[c("Ozone", "Wind")]
+
+airquality[3,]
+
+airquality[,4]
+
+airquality["Solar.R"]
+
+
+airquality_tibble[1:5, 3]
+
+airquality_tibble[c("Ozone", "Wind")]
+
+airquality_tibble[3,]
+
+airquality_tibble[,4]
+
+airquality_tibble["Solar.R"]
+
+
+# Subsetting by $
+
+airquality$Wind
+
+airquality_tibble$Wind
+
+# Subsetting by [[ ]]
+  
+airquality[[4]]
+
+airquality_tibble[["Temp"]]
+
+
+# ================================================
+# 3.3 - Subsetting Dataframes via dplyr functions
+# ================================================
+
+
+airquality_tibble_select <- select(
+  .data= airquality_tibble, 
+  c("Ozone", "Wind")
+)
+
+airquality_tibble_filter <- filter(
+  .data= airquality_tibble,
+  Month == 5
+)
+
+airquality_tibble_slice_head <- slice_head(
+  .data= airquality_tibble,
+  n    = 1  
+)
+
+airquality_tibble_slice_sample <- slice_sample(
+  .data= airquality_tibble,
+  n    = 3
+)
+
